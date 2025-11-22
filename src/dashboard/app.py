@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -27,7 +29,7 @@ def load_pipeline():
 pipe = load_pipeline()
 
 # ------------------------------------------------------------------
-# Sidebar: description + presets
+# Sidebar: description + presets (including random personality sample)
 # ------------------------------------------------------------------
 st.sidebar.title("MoodMosaic")
 st.sidebar.write(
@@ -42,27 +44,49 @@ example_choice = st.sidebar.selectbox(
         "Positive day",
         "Frustrated and stressed",
         "Mixed polite and impolite",
+        "Random personality sample",
     ],
 )
 
-if example_choice == "Positive day":
-    default_text = """I am really excited about how this semester is going.
+# Example blocks
+positive_day = """I am really excited about how this semester is going.
 I feel proud of the work I put into my projects.
 Thank you so much for helping me with the assignment.
 I am grateful for my friends checking in on me today.
 I am curious to see how far I can push this project."""
-elif example_choice == "Frustrated and stressed":
-    default_text = """Today was exhausting and nothing worked the way I expected.
+
+frustrated_block = """Today was exhausting and nothing worked the way I expected.
 I am annoyed that my code keeps breaking right before the deadline.
 This whole situation makes me nervous and a little scared.
 I feel disappointed in myself for not planning better.
 Please just fix this issue, I do not have the energy to debug again."""
-elif example_choice == "Mixed polite and impolite":
-    default_text = """Could you please review my pull request when you get time.
+
+mixed_tone_block = """Could you please review my pull request when you get time.
 Thanks a lot for taking the extra effort on this task.
 This is completely wrong, you did not follow the instructions.
 Why did you ignore my message, this is really upsetting.
 I appreciate your patience and all the feedback you gave me."""
+
+# Big Five flavored sentences we used in the test script
+personality_snippets = [
+    "I love learning new ideas and exploring different research topics. I enjoy reading, reflecting, and trying creative approaches in my projects.",
+    "I always plan my work carefully, make detailed schedules, and double check everything before I submit.",
+    "I feel energized when I am around people and I like being the one who starts conversations in group projects.",
+    "I try to be patient and supportive with my teammates, and I care a lot about keeping a friendly atmosphere.",
+    "I often worry about results and deadlines, and sometimes I feel stressed or anxious when things are uncertain.",
+]
+
+if example_choice == "Positive day":
+    default_text = positive_day
+elif example_choice == "Frustrated and stressed":
+    default_text = frustrated_block
+elif example_choice == "Mixed polite and impolite":
+    default_text = mixed_tone_block
+elif example_choice == "Random personality sample":
+    # pick 3–5 random snippets and shuffle them
+    k = random.randint(3, len(personality_snippets))
+    chosen = random.sample(personality_snippets, k=k)
+    default_text = "\n".join(chosen)
 else:
     default_text = ""
 
@@ -174,7 +198,6 @@ if analyze_btn:
             result = pipe.analyze_messages(lines)
 
         per_message = result["per_message"]
-        # Use our own aggregation for the radar plots
         emo_mean, dom_emotions = build_emotion_summary(per_message)
         personality = build_personality_series(result["summary"]["personality"])
         df_msgs = build_per_message_df(per_message, dom_emotions)
