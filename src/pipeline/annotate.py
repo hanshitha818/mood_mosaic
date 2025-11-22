@@ -15,7 +15,7 @@ GOEMO_LABELS = [
     "disapproval", "disgust", "embarrassment", "excitement", "fear",
     "gratitude", "grief", "joy", "love", "nervousness",
     "optimism", "pride", "realization", "relief", "remorse",
-    "sadness", "surprise", "neutral"
+    "sadness", "surprise", "neutral",
 ]
 
 POLITE_LABELS = ["impolite", "neutral", "polite"]
