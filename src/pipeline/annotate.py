@@ -1,58 +1,73 @@
+import os
 import torch
 import numpy as np
 from transformers import AutoTokenizer
 from src.models.emotion_model import EmotionClassifier
 from src.models.tone_model import ToneClassifier
 from src.models.personality_model import PersonalityRegressor
-from src.data.goemotions import GOEMO_LABELS
 from src.data.politeness import POLITE_LABELS
 from src.data.essays_big5 import BIG5_TRAITS
 from src.pipeline.aggregation import summarize_emotions
 
+# Static copy of the GoEmotions label set used in our project
+GOEMO_LABELS = [
+    "admiration", "amusement", "anger", "annoyance", "approval",
+    "caring", "confusion", "curiosity", "desire", "disappointment",
+    "disapproval", "disgust", "embarrassment", "excitement", "fear",
+    "gratitude", "grief", "joy", "love", "nervousness",
+    "optimism", "pride", "realization", "relief", "remorse",
+    "sadness", "surprise", "neutral"
+]
+
 class MoodMosaicPipeline:
     def __init__(self, paths):
-        # device
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print("Pipeline using device:", self.device)
 
-        # ----- Emotion (RoBERTa base + our checkpoint) -----
+        # ----- Emotion model -----
         self.emo_tokenizer = AutoTokenizer.from_pretrained("roberta-base")
         self.emo_model = EmotionClassifier(
             model_name="roberta-base",
             num_labels=len(GOEMO_LABELS),
         )
-        emo_state = torch.load(
-            f'{paths["emotion"]}/pytorch_model.bin',
-            map_location=self.device,
-        )
-        self.emo_model.load_state_dict(emo_state)
+        emo_ckpt = os.path.join(paths["emotion"], "pytorch_model.bin")
+        if os.path.exists(emo_ckpt):
+            emo_state = torch.load(emo_ckpt, map_location=self.device)
+            self.emo_model.load_state_dict(emo_state)
+            print("Loaded fine tuned emotion checkpoint")
+        else:
+            print("No emotion checkpoint found, using base RoBERTa with random head")
         self.emo_model.to(self.device)
         self.emo_model.eval()
 
-        # ----- Tone (DistilBERT base + our checkpoint) -----
-        self.tone_tokenizer = AutoTokenizer.from_pretrained(paths["tone"])
+        # ----- Tone model -----
+        self.tone_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
         self.tone_model = ToneClassifier(
             model_name="distilbert-base-uncased",
             num_labels=len(POLITE_LABELS),
         )
-        tone_state = torch.load(
-            f'{paths["tone"]}/pytorch_model.bin',
-            map_location=self.device,
-        )
-        self.tone_model.load_state_dict(tone_state)
+        tone_ckpt = os.path.join(paths["tone"], "pytorch_model.bin")
+        if os.path.exists(tone_ckpt):
+            tone_state = torch.load(tone_ckpt, map_location=self.device)
+            self.tone_model.load_state_dict(tone_state)
+            print("Loaded fine tuned tone checkpoint")
+        else:
+            print("No tone checkpoint found, using base DistilBERT with random head")
         self.tone_model.to(self.device)
         self.tone_model.eval()
 
-        # ----- Personality (SentenceTransformer + our MLP, hidden_dim=128) -----
+        # ----- Personality model -----
         self.personality_model = PersonalityRegressor(
             paths["personality_sbert"],
             hidden_dim=128,
         )
-        pers_state = torch.load(
-            paths["personality_ckpt"],
-            map_location=self.device,
-        )
-        self.personality_model.load_state_dict(pers_state)
+        pers_ckpt = paths["personality_ckpt"]
+        if os.path.exists(pers_ckpt):
+            pers_state = torch.load(pers_ckpt, map_location=self.device)
+            self.personality_model.load_state_dict(pers_state)
+            print("Loaded personality checkpoint")
+        else:
+            print("No personality checkpoint found, using random MLP weights")
         self.personality_model.to(self.device)
         self.personality_model.eval()
 
