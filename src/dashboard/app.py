@@ -10,9 +10,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-from src.pipeline.annotate import MoodMosaicPipeline
-from src.data.goemotions import GOEMO_LABELS
-from src.data.politeness import POLITE_LABELS
+from src.pipeline.annotate import MoodMosaicPipeline, GOEMO_LABELS, POLITE_LABELS, BIG5_TRAITS
 
 paths = {
     "emotion": "experiments/checkpoints/emotion/best",
