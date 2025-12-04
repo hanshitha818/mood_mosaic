@@ -77,34 +77,17 @@ All results are presented in a simple **Streamlit app**.
 
 ---
 
-## Repository Structure
+## Screenshots and Visual Overview
 
-A simplified view:
+### 1. Overall system pipeline
 
-```text
-moodmosaic/
-├── configs/                       # YAML/JSON configs for training/inference
-├── data/                          # Data folders (not tracked in git by default)
-├── experiments/
-│   └── checkpoints/
-│       ├── emotion/               # GoEmotions emotion model checkpoints
-│       ├── tone_stanford/         # Politeness checkpoint
-│       └── personality_big5/      # Big Five checkpoint
-├── scripts/                       # Helper scripts / CLI wrappers
-├── src/
-│   ├── dashboard/
-│   │   └── app.py                 # Streamlit UI
-│   ├── models/
-│   │   └── personality_model.py   # SBERT + MLP personality regressor
-│   ├── pipeline/
-│   │   └── annotate.py            # MoodMosaicPipeline (core inference pipeline)
-│   └── training/
-│       ├── train_emotion_goemotions.py
-│       ├── train_tone_stanford.py
-│       └── train_personality_big5.py
-├── best_big5.pt                   # Example personality checkpoint (exported)
-├── requirements.txt
-├── team_chat.csv                  # Example input CSV
-├── st.text_area                   # Example text input file
-└── report/
-    └── moodmosaic_report.tex      # ACL-style project report (draft)
+High-level architecture: text input → preprocessing → per-message models → aggregation → personality → dashboard.
+
+```markdown
+![System pipeline diagram](docs/img/pipeline_overview.png)
+![Dashboard overview with emotion + Big Five radar charts](docs/img/dashboard_overview.png)
+![Per-message details table](docs/img/dashboard_message_table.png)
+![Emotion radar chart over GoEmotions labels](docs/img/emotion_radar.png)
+![Big Five personality radar chart](docs/img/personality_radar.png)
+![Big Five personality radar chart](docs/img/personality_radar.png)
+
