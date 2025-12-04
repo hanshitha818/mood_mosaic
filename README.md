@@ -15,19 +15,19 @@ The goal is not clinical-level prediction, but a clear analytic view that feels 
 
 ## Table of Contents
 
-1. [Project Overview](#project-overview)  
-2. [Main Features](#main-features)  
-3. [Repository Structure](#repository-structure)  
-4. [Installation](#installation)  
-5. [Models and Data](#models-and-data)  
-6. [Training the Models](#training-the-models)  
-7. [Running the Dashboard](#running-the-dashboard)  
-8. [Using the Dashboard](#using-the-dashboard)  
-9. [Evaluation and Metrics](#evaluation-and-metrics)  
-10. [Limitations and Ethics](#limitations-and-ethics)  
-11. [Planned Extensions](#planned-extensions)  
-12. [Citation](#citation)  
-
+1. [Project Overview](#project-overview)
+2. [Main Features](#MainFeatures)
+3. [Data and Tasks](#data-and-tasks)  
+4. [Screenshots and Visual Overview](#screenshots-and-visual-overview)  
+5. [Models and Pipeline](#models-and-pipeline)    
+6. [Installation](#installation)  
+7. [Data and Checkpoints Setup](#data-and-checkpoints-setup)  
+8. [Training the Models](#training-the-models)  
+9. [Running the Dashboard](#running-the-dashboard)  
+10. [Using the Dashboard](#using-the-dashboard)  
+11. [Experiments and Results](#experiments-and-results)  
+12. [Limitations and Ethics](#limitations-and-ethics)  
+13. [Future Work](#future-work)  
 ---
 
 ## Project Overview
@@ -76,6 +76,106 @@ All results are presented in a simple **Streamlit app**.
   - Experiment configs under `configs/`  
 
 ---
+## Data and Tasks
+Data and Tasks
+MoodMosaic uses three publicly available datasets (not redistributed in this repository).
+You are expected to download them yourself from their official sources or common ML hubs.
+1. Emotion: GoEmotions
+Task: Multi-label emotion classification over short comments.
+Labels: 27 emotion labels + neutral (subset of the full GoEmotions label space).
+Use in MoodMosaic:
+Each message may express multiple emotions. The model outputs a probability per label; a threshold is applied at inference time to decide which labels are “active.”
+Example labels (non-exhaustive): joy, anger, sadness, gratitude, fear, disappointment, admiration, confusion.
+2. Tone: Politeness
+Task: Binary classification: impolite (0) vs polite (1).
+Data: Short requests and responses annotated for politeness.
+Use in MoodMosaic:
+Each message gets a single politeness label. The dashboard overlays this with emotions to show how emotional tone and politeness co-occur in the text.
+3. Personality: Essays Big Five
+Task: Regression of Big Five traits from essays.
+Traits:
+Openness
+Conscientiousness
+Extraversion
+Agreeableness
+Neuroticism
+Use in MoodMosaic:
+Text is aggregated at the session level (or batched) and fed through a personality regressor, producing continuous scores for each trait. These are visualized in a radar chart.
+
+## Limitations and Ethics
+MoodMosaic is a research and teaching prototype, not a psychological assessment or production system.
+Key limitations:
+Data bias and coverage
+The training data comes from specific platforms and contexts.
+The models may not generalize to all languages, dialects, or genres.
+No clinical validity
+The Big Five scores are rough, text-based approximations.
+They are not validated psychological measurements.
+Over-interpretation risk
+Radar charts and tables can look very precise.
+Users should treat them as exploratory visualizations, not ground truth.
+Privacy and safety
+Do not feed in sensitive, private, or confidential data.
+If you use real chat logs or emails, anonymize them first.
+Small politeness dataset
+The politeness component is trained on a relatively small slice of data.
+High validation accuracy may not carry over to all real-world requests.
+Because of these limitations, do not use MoodMosaic for:
+hiring or performance evaluation
+medical or mental health decisions
+grading or disciplinary decisions
+any other high-stakes setting
+
+## Using the Dashboard
+Input modes
+Free text mode
+Paste or type messages into the text area.
+Use one message per line (e.g., chat turns, comments, tweets).
+Click the button to run the analysis.
+CSV upload mode
+Upload a .csv file (e.g., team_chat.csv).
+Choose which column contains the text.
+Optionally filter or sample rows.
+Output views
+Overview tab
+Emotion radar chart: shows the average emotion distribution across all messages.
+Big Five radar chart: shows the aggregated OCEAN profile for the current session.
+Per-message details tab
+Table with one row per message:
+original text
+dominant emotion label
+politeness label (polite/impolite)
+Filters to subset by emotion or tone.
+A button to download predictions as CSV.
+Preset examples
+The app can optionally offer presets such as:
+An artificially positive conversation.
+A more frustrated or negative conversation.
+Mixed, realistic chat logs.
+Synthetic examples highlighting particular traits.
+These help you demo the system quickly without preparing your own data.
+
+
+## Future Work
+
+Possible extensions and improvements:
+Better calibration and uncertainty estimates
+Improve how emotion and politeness probabilities are calibrated and communicated.
+Richer conversation analysis
+Per-speaker emotion and personality views.
+Time-series plots over long chats.
+Clustering of messages by emotional style.
+Multilingual support
+Add language identification and fine-tuned models for non-English text.
+Explainability tools
+Token-level or span-level saliency maps.
+Natural language explanations of why a message was labeled a certain way.
+Larger and more diverse datasets
+Stronger politeness models with more data.
+Additional personality datasets beyond essays.
+Contributions via issues and pull requests are welcome.
+
+## 
 
 ## Screenshots and Visual Overview
 
@@ -90,4 +190,5 @@ High-level architecture: text input → preprocessing → per-message models →
 ![Emotion radar chart over GoEmotions labels](docs/img/emotion_radar.png)
 ![Big Five personality radar chart](docs/img/personality_radar.png)
 ![Big Five personality radar chart](docs/img/personality_radar.png)
+
 
