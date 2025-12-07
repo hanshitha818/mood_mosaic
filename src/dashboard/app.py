@@ -7,9 +7,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-# ---------------------------------------------------------------------
-# Make sure the project root is on sys.path so `src.*` imports work
-# ---------------------------------------------------------------------
+
+
 ROOT_DIR = os.path.dirname(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
