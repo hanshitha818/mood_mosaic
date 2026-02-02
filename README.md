@@ -63,6 +63,23 @@ All outputs are visualized using an interactive **Streamlit dashboard**.
 - **Version Control:** Git, GitHub
 
 ---
+## Screenshots and Visual Overview
+
+**Dashboard Overview**  
+Shows the combined emotion distribution and Big Five personality radar charts for the current session.  
+![Dashboard Overview](dashboard_overview.png)
+
+**Per-Message Analysis Table**  
+Displays individual messages with dominant emotion and politeness tone, with filtering support.  
+![Dashboard Table](dashboard.png)
+
+**Emotion Radar Chart**  
+Visualizes fine-grained emotion probabilities based on the GoEmotions label set.  
+![Emotion Radar](emotion_radar.png)
+
+**Personality Radar Chart (Big Five)**  
+Shows the aggregated OCEAN personality profile inferred from the input text.  
+![Personality Radar](personality_radar.png)
 
 ## Installation
 
