@@ -66,23 +66,22 @@ All outputs are visualized using an interactive **Streamlit dashboard**.
 
 ## Installation
 
-Clone the repository:
+### Clone the repository
 
 ```bash
 git clone https://github.com/hanshitha818/mood_mosaic.git
 cd mood_mosaic
 
-## Create and activate a virtual environment
-
+### Create a virtual environment
 python -m venv venv
 source venv/bin/activate   # macOS/Linux
 venv\Scripts\activate      # Windows
 
-## Install dependencies
+### Install dependencies
 
 pip install -r requirements.txt
 
-## Running the application
+### Running the application
 
 streamlit run app.py
 The application will be available at:
