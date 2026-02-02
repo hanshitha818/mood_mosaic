@@ -67,33 +67,25 @@ All outputs are visualized using an interactive **Streamlit dashboard**.
 ## Installation
 
 ### Clone the repository
+git clone https://github.com/hanshitha818/mood_mosaic.git  
+cd mood_mosaic  
 
-```bash
-git clone https://github.com/hanshitha818/mood_mosaic.git
-cd mood_mosaic
-
-### Create a virtual environment
-python -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
+### Create and activate a virtual environment
+python -m venv venv  
+source venv/bin/activate    # macOS/Linux  
+venv\Scripts\activate       # Windows  
 
 ### Install dependencies
-
-pip install -r requirements.txt
+pip install -r requirements.txt  
 
 ### Running the application
+streamlit run app.py  
 
-streamlit run app.py
-The application will be available at:
-http://localhost:8501
+The application will be available at:  
+http://localhost:8501  
 
-
-**## Key Outcomes**
-
-Built a unified NLP pipeline combining emotion, tone, and personality modeling
-
-Translated complex transformer outputs into human-interpretable visual insights
-
-Demonstrated how aggregation strategies affect behavioral inference
-
-Highlighted responsible use and limitations of AI-driven personality analysis
+## Key Outcomes
+- Built a unified NLP pipeline combining emotion detection, politeness tone classification, and personality modeling  
+- Translated complex transformer outputs into clear, human-interpretable visual insights  
+- Demonstrated how aggregation strategies influence behavioral inference from text  
+- Highlighted responsible use cases and limitations of AI-driven personality analysis  
